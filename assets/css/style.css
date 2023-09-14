@@ -13,6 +13,8 @@ body {
 }
 
 .carousel {
+  position: relative;
+
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -66,7 +68,7 @@ body {
   display: -ms-flexbox;
   display: flex;
 
-  padding: 50px;
+  padding: 30px;
 
   -webkit-transform: translate(-50%, 0);
       -ms-transform: translate(-50%, 0);
@@ -153,7 +155,7 @@ body {
   font-size: 30vh;
 }
 
-@media (max-width: 575.8px) {
+@media (max-width: 767.8px) {
   .control-pause {
     font-size: 15vh;
   }

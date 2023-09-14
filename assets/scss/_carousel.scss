@@ -1,4 +1,5 @@
 .carousel {
+  position: relative;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -35,7 +36,6 @@
   background-size: cover;
 }
 
-
 .active {
   z-index: 2;
 
@@ -50,7 +50,7 @@
 
   display: flex;
 
-  padding: 50px;
+  padding: 30px;
 
   transform: translate(-50%, 0);
 
@@ -58,6 +58,7 @@
 }
 
 .indicator {
+  // position: relative;
   width: 35px;
   height: 5px;
 
@@ -121,4 +122,8 @@
   color: transparent;
 
   font-size: 30vh;
+
+  @include md {
+    font-size: 15vh;
+  }
 }
