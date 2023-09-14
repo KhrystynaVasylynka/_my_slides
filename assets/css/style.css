@@ -152,9 +152,3 @@ body {
 
   font-size: 30vh;
 }
-
-@media (max-width: 575.8px) {
-  .control-pause {
-    font-size: 15vh;
-  }
-}

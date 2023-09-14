@@ -16,7 +16,7 @@
 
   <div class="container">
 
-    <div id="mycarousel" class="carousel">
+    <div id="carousel" class="carousel">
 
       <ul class="slides">
         <li class="slide active"
@@ -33,11 +33,28 @@
           style="background-image: url(assets/img/2000-oleg_dobriansky-fd05c7784b2834aa048a5c15e06cbfaf.jpg)"></li>
       </ul>
 
+      <div id="controls-container" class="controls">
+        <span id="pause-btn" class="control control-pause"><i class="fa-solid fa-pause-circle"></i></span>
+        <span id="prev-btn" class="control control-prev"><i class="fa-solid fa-chevron-left"
+            style="color: #ffffff;"></i></span>
+        <span id="next-btn" class="control control-next"><i class="fa-solid fa-chevron-right"
+            style="color: #ffffff;"></i></span>
+      </div>
+
+      <div id="indicators-container" class="indicators">
+        <div class="indicator active" data-slide-to="0"></div>
+        <div class="indicator" data-slide-to="1"></div>
+        <div class="indicator" data-slide-to="2"></div>
+        <div class="indicator" data-slide-to="3"></div>
+        <div class="indicator" data-slide-to="4"></div>
+        <div class="indicator" data-slide-to="5"></div>
+        <div class="indicator" data-slide-to="6"></div>
+      </div>
+
     </div>
 
-  </div>
 
-  <script src="assets/js/index.js" type="module"></script>
+  <script src="assets/js/carousel.js" type="module"></script>
 </body>
 
 </html>

@@ -1,142 +1,140 @@
-class Carousel {
-  constructor(p) {
-    const settings = { ...{ containerID: '#carousel', slideID: '.slide', interval: 2000, isPlaying: true, }, ...p}
-    this.container = document.querySelector(settings.containerID)
-    this.slidesItems = this.container.querySelectorAll(settings.slideID)
-    this.interval = settings.interval
-    this.isPlaying = settings.isPlaying
+(function () {
+  const container = document.querySelector('#carousel');
+  const slides = container.querySelectorAll('.slide');
+  const indicatorsContainer = container.querySelector('#indicators-container');
+  const indicatorItems = indicatorsContainer.querySelectorAll('.indicator');
+  const controlsContainer = container.querySelector('#controls-container');
+  const pauseBtn = controlsContainer.querySelector('#pause-btn');
+  const prevBtn = controlsContainer.querySelector('#prev-btn');
+  const nextBtn = controlsContainer.querySelector('#next-btn');
+
+  const SLIDES_COUNT = slides.length;
+  const CODE_ARROW_LEFT = 'ArrowLeft';
+  const CODE_ARROW_RIGHT = 'ArrowRight';
+  const CODE_SPACE = 'Space';
+  const FA_PAUSE = '<i class="far fa-pause-circle"></i>';
+  const FA_PLAY =
+    '<i class="far fa-play-circle"></i>';
+  const INTERVAL = 2000;
+
+  let currentSlide = 0;
+  let timerID = null;
+  let isPlaying = true;
+  let startPosX = null;
+  let endPosX = null;
+
+  // start
+  function gotoNth(n) {
+    slides[currentSlide].classList.toggle('active');
+    indicatorItems[currentSlide].classList.toggle('active');
+    currentSlide = (n + SLIDES_COUNT) % SLIDES_COUNT;
+    slides[currentSlide].classList.toggle('active');
+    indicatorItems[currentSlide].classList.toggle('active');
   }
 
-  _initProps() {
-    this.SLIDES_COUNT = this.slidesItems.length
-    this.CODE_ARROW_LEFT = 'ArrowLeft'
-    this.CODE_ARROW_RIGHT = 'ArrowRight'
-    this.CODE_ARROW_SPACE = 'Space'
-    this.FA_PAUSE = '<i class="fas fa-pause-circle"></i>'
-    this.FA_PLAY = '<i class="fas fa-play-circle"></i>'
-    this.FA_PREV ='<i class="fas fa-angle-left"></i>'
-    this.FA_NEXT ='<i class="fas fa-angle-right"></i>'
-
-    this.currentSlide = 0
-    }
-
-  _initControls () {
-    const controls = document.createElement('div')
-    const PAUSE = `<span class="control control-pause" id="pause-btn">${this.isPlaying ? this.FA_PAUSE : this.FA_PLAY}</span>`
-    const PREV = `<span class="control control-prev" id="prev-btn">${this.FA_PREV}</span>`
-    const NEXT =`<span class="control control-next" id="next-btn">${this.FA_NEXT}</span>`
-
-    controls.setAttribute('id', 'controls-container')
-    controls.setAttribute('class', 'controls')
-    controls.innerHTML = PAUSE + PREV + NEXT
-    this.container.append(controls)
-    this.pauseBtn =  this.container.querySelector('#pause-btn')
-    this.prevBtn = this.container.querySelector('#prev-btn')
-    this.nextBtn = this.container.querySelector('#next-btn')
-    }
-  
-  _initIndicators () {
-    const indicators = document.createElement('div')
-
-    indicators.setAttribute('id', 'indicators-container')
-    indicators.setAttribute('class', 'indicators')
-
-    for (let i = 0; i < this.SLIDES_COUNT; i++) {
-      const indicator = document.createElement('span')
-      indicator.setAttribute('class', i ? 'indicator' : 'indicator active')
-      indicator.dataset.slideTo = i
-      indicators.append(indicator)
-    }
-    this.container.append(indicators)
-
-    this.indicatorsContainer = this.container.querySelector('#indicators-container')
-    this.indicatorItems = this.container.querySelectorAll('.indicator')
+  // make timer
+  function timer() {
+    timerID = setInterval(gotoNext, INTERVAL);
   }
 
-  _initListeners() {
-    document.addEventListener('keydown', this._pressKey.bind(this))
-    this.pauseBtn.addEventListener('click', this.pausePlay.bind(this))
-    this.prevBtn.addEventListener('click',this.prev.bind(this))
-    this.nextBtn.addEventListener('click', this.next.bind(this))
-    this.indicatorsContainer.addEventListener('click', this._indicateHandler.bind(this))
-    // this.container.addEventListener('mouseenter', this.pause.bind(this))
-    this.container.addEventListener('mouseleave', this.play.bind(this))
-
-    }
-
-  _gotoNth(n) {
-    this.slidesItems[this.currentSlide].classList.toggle('active')
-    this.indicatorItems[this.currentSlide].classList.toggle('active')
-    this.currentSlide = (n + this.SLIDES_COUNT) % this.SLIDES_COUNT
-    this.slidesItems[this.currentSlide].classList.toggle('active')
-    this.indicatorItems[this.currentSlide].classList.toggle('active')
+  function gotoPrev() {
+    gotoNth(currentSlide - 1);
   }
 
-  _gotoPrev() {
-    this._gotoNth(this.currentSlide - 1)
+  function gotoNext() {
+    gotoNth(currentSlide + 1);
   }
 
-    _gotoNext() {
-    this._gotoNth(this.currentSlide + 1)
+  // make controls
+  function pauseHandler() {
+    if (!isPlaying) return;
+    pauseBtn.innerHTML = FA_PLAY;
+    isPlaying = !isPlaying;
+    clearInterval(timerID);
   }
 
-  _tick() {
-    if (!this.isPlaying) return
-    if (this.timerID) return
-    this.timerID = setInterval (() => this._gotoNext(), this.interval)
+  function playHandler() {
+    pauseBtn.innerHTML = FA_PAUSE;
+    isPlaying = !isPlaying;
+    timer();
   }
 
-  _indicateHandler(e) {
-    const target = e.target
+  function pausePlayHandler() {
+    if (isPlaying) pauseHandler();
+    else playHandler();
+  }
+
+  function prevHandler() {
+    pauseHandler();
+    gotoPrev();
+  }
+
+  function nextHandler() {
+    pauseHandler();
+    gotoNext();
+  }
+
+  // make indicators
+  function indicateHandler(e) {
+    const { target } = e;
     if (target && target.classList.contains('indicator')) {
-    this.pause()
-    this._gotoNth(+target.dataset.slideTo)
+      pauseHandler();
+      gotoNth(+target.dataset.slideTo);
     }
   }
 
-  _pressKey(e) {
-    const code = e.code
-    e.preventDefault()
-    if (code === this.CODE_ARROW_LEFT)this.prev()
-    if (code === this.CODE_ARROW_RIGHT) this.next()
-    if (code === this. CODE_ARROW_SPACE) this.pausePlay()
+  // make controls
+  function pressKey(e) {
+    const { code } = e;
+    e.preventDefault();
+    if (code === CODE_ARROW_LEFT) prevHandler();
+    if (code === CODE_ARROW_RIGHT) nextHandler();
+    if (code === CODE_SPACE) pausePlayHandler();
   }
 
-  pause() {
-    if (!this.isPlaying) return
-    this.isPlaying = false
-    clearInterval(this.timerID)
-    this.pauseBtn.innerHTML = this.FA_PLAY
-    this.timerID = null
+  // make swipe
+  function swipeStart(e) {
+    if (e instanceof MouseEvent) {
+      startPosX = e.pageX;
+      return;
+    }
+
+    if (e instanceof TouchEvent) {
+      startPosX = e.changedTouches[0].pageX;
+    }
+    startPosX = e instanceof MouseEvent ? e.pageX : e.changedTouches[0].pageX;
   }
 
-  play() {
-    if (this.isPlaying) return
-    this.isPlaying = true
-    this._tick()
-    this.pauseBtn.innerHTML = this.FA_PAUSE
+  function swipeEnd(e) {
+    if (e instanceof MouseEvent) {
+      endPosX = e.pageX;
+    } else if (e instanceof TouchEvent) {
+      endPosX = e.changedTouches[0].pageX;
+    }
+    endPosX = e instanceof MouseEvent ? e.pageX : e.changedTouches[0].pageX;
+
+    if (endPosX - startPosX > 100) prevHandler();
+    if (endPosX - startPosX < -100) nextHandler();
   }
 
-  pausePlay() {
-    this.isPlaying ? this.pause() : this.play()
+  // make listeners
+  function initListeners() {
+    pauseBtn.addEventListener('click', pausePlayHandler);
+    nextBtn.addEventListener('click', nextHandler);
+    prevBtn.addEventListener('click', prevHandler);
+    indicatorsContainer.addEventListener('click', indicateHandler);
+    container.addEventListener('touchstart', swipeStart);
+    container.addEventListener('mousedown', swipeStart);
+    container.addEventListener('touchend', swipeEnd);
+    container.addEventListener('mouseup', swipeEnd);
+    document.addEventListener('keydown', pressKey);
   }
 
-  prev() {
-    this.pause()
-    this._gotoPrev()
+  // init
+  function init() {
+    initListeners();
+    timer();
   }
 
-  next() {
-    this.pause()
-    this._gotoNext()
-  }
-
-  init() {
-    this._initProps()
-    this._initControls()
-    this._initIndicators()
-    this._initListeners()
-    this._tick()
-  }
-}
-export default Carousel
+  init();
+})();
