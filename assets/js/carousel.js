@@ -10,11 +10,11 @@ Carousel.prototype = {
     this.CODE_SPACE = 'Space';
     this.FA_PAUSE = '<i class="far fa-pause-circle"></i>';
     this.FA_PLAY =
-      '<i class="far fa-play-circle" style="font-size:70px; color:white"></i>';
+      '<i class="far fa-play-circle"></i>';
     this.FA_PREV =
       '<i class="fa-solid fa-chevron-left"></i>';
     this.FA_NEXT =
-      '<i class="fa-solid fa-chevron-right" ></i>';
+      '<i class="fa-solid fa-chevron-right"></i>';
 
     this.INTERVAL = 2000;
     this.currentSlide = 0;
@@ -58,7 +58,6 @@ Carousel.prototype = {
     this.indicatorItems = this.container.querySelectorAll('.indicator');
   },
 
-  // start
   _gotoNth: function (n) {
     this.slides[this.currentSlide].classList.toggle('active');
     this.indicatorItems[this.currentSlide].classList.toggle('active');
@@ -67,7 +66,6 @@ Carousel.prototype = {
     this.indicatorItems[this.currentSlide].classList.toggle('active');
   },
 
-  // make timer
   _timer: function () {
     this.timerID = setInterval(this._gotoNext.bind(this), this.INTERVAL);
   },
@@ -80,7 +78,6 @@ Carousel.prototype = {
     this._gotoNth(this.currentSlide + 1);
   },
 
-  // make controls
   pause: function () {
     if (!this.isPlaying) return;
     this.pauseBtn.innerHTML = this.FA_PLAY;
@@ -109,7 +106,6 @@ Carousel.prototype = {
     this._gotoNext();
   },
 
-  // make indicators
   _indicateHandler: function (e) {
     const { target } = e;
     if (target && target.classList.contains('indicator')) {
@@ -118,7 +114,6 @@ Carousel.prototype = {
     }
   },
 
-  // make controls
   _pressKey: function (e) {
     const { code } = e;
     e.preventDefault();
@@ -127,7 +122,6 @@ Carousel.prototype = {
     if (code === this.CODE_SPACE) this.pausePlay();
   },
 
-  // make listeners
   _initListeners: function () {
     this.pauseBtn.addEventListener('click', this.pausePlay.bind(this));
     this.nextBtn.addEventListener('click', this.next.bind(this));
@@ -139,7 +133,7 @@ Carousel.prototype = {
     document.addEventListener('keydown', this._pressKey.bind(this));
   },
 
-  // init
+
   init: function () {
     this._initProps();
     this._initControls();
