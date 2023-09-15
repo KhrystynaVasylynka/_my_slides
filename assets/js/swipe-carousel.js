@@ -1,31 +1,38 @@
-import Carousel from "./carousel.js"
-class SwipeCarousel extends Carousel {
-  constructor(...args) {
-    super(...args)
-    this.itemsContainer = this.slidesItems[0].parentElement
+function SwipeCarousel() {
+  Carousel.apply(this, arguments);
+}
+
+SwipeCarousel.prototype = Object.create(Carousel.prototype);
+SwipeCarousel.prototype.constructor = SwipeCarousel;
+
+SwipeCarousel.prototype._initListeners = function () {
+  Carousel.prototype._initListeners.apply(this);
+  this.container.addEventListener('touchstart', this._swipeStart.bind(this));
+  this.container.addEventListener('mousedown', this._swipeStart.bind(this));
+  this.container.addEventListener('touchend', this._swipeEnd.bind(this));
+  this.container.addEventListener('mouseup', this._swipeEnd.bind(this));
+};
+(SwipeCarousel.prototype._swipeStart = function (e) {
+  if (e instanceof MouseEvent) {
+    this.startPosX = e.pageX;
+    return;
   }
 
-  _initListeners() {
-  super._initListeners()
-  this.itemsContainer.addEventListener('touchstart', this._swipeStart.bind(this))
-  this.itemsContainer.addEventListener('mousedown', this._swipeStart.bind(this))
-  this.itemsContainer.addEventListener('touchend', this._swipeEnd.bind(this))
-  this.itemsContainer.addEventListener('mouseup', this._swipeEnd.bind(this))
-}
-
-_swipeStart(e) {
-  this.startPosX = e instanceof MouseEvent
-    ? e.pageX //MouseEvent
-    : e.changedTouches[0].pageX //TouchEvent
+  if (e instanceof TouchEvent) {
+    this.startPosX = e.changedTouches[0].pageX;
   }
+  this.startPosX =
+    e instanceof MouseEvent ? e.pageX : e.changedTouches[0].pageX;
+}),
+  (SwipeCarousel.prototype._swipeEnd = function (e) {
+    if (e instanceof MouseEvent) {
+      this.endPosX = e.pageX;
+    } else if (e instanceof TouchEvent) {
+      this.endPosX = e.changedTouches[0].pageX;
+    }
+    this.endPosX =
+      e instanceof MouseEvent ? e.pageX : e.changedTouches[0].pageX;
 
- _swipeEnd (e) {
-  this.endPosX = e instanceof MouseEvent
-  ? e.pageX//MouseEvent
-  : e.changedTouches[0].pageX//TouchEvent
-if (this.endPosX - this.startPosX > 100) this.prev()
-if (this.endPosX - this.startPosX < -100) this.next()
-}
-}
-export default SwipeCarousel
-
+    if (this.endPosX - this.startPosX > 100) this.prev();
+    if (this.endPosX - this.startPosX < -100) this.next();
+  });
