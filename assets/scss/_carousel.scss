@@ -1,5 +1,14 @@
+@import "normalize";
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding-top: 10px;
+}
+
 .carousel {
   position: relative;
+
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -7,29 +16,25 @@
 .slides {
   position: relative;
 
-  width: 90%;
-  height: 500px;
+  width: 100%;
+  height: 90vh;
   margin-right: auto;
   margin-left: auto;
 
   list-style-type: none;
 }
 
-.container {
-  max-width: 1300px;
-}
-
 .slide {
   position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
 
   width: 100%;
   height: 100%;
-  margin-top: 15px;
+  padding: 10px;
 
   transition: opacity 1s;
+  transform: translate(-50%, -50%);
 
   opacity: 0;
   background-position: center;
@@ -42,6 +47,28 @@
   opacity: 1;
 }
 
+.fa-chevron-left,
+.fa-chevron-right {
+  font-size: 70px;
+
+  @include sm {
+    font-size: 50px;
+  }
+}
+
+.fa-play-circle,
+.fa-pause-circle {
+  font-size: 100px;
+
+  @include sm {
+    font-size: 70px;
+  }
+  &:hover,
+  &:focus {
+    color: #ffffff;
+  }
+}
+
 .indicators {
   position: absolute;
   z-index: 2;
@@ -50,15 +77,14 @@
 
   display: flex;
 
-  padding: 30px;
+  padding: 40px 0;
 
   transform: translate(-50%, 0);
 
-  gap: 10px;
+  gap: 20px;
 }
 
 .indicator {
-  // position: relative;
   width: 35px;
   height: 5px;
 
@@ -71,6 +97,10 @@
   &.active {
     background-color: white;
   }
+  @include sm {
+   width: 25px;
+   height: 2.5px;
+}
 }
 
 .control {
@@ -80,8 +110,6 @@
   cursor: pointer;
   user-select: none;
   transition: 0.5s;
-
-  color: white;
   color: rgba(255, 255, 255, 0.2);
 
   &:hover,
@@ -92,38 +120,41 @@
 
 .control-prev {
   top: 50%;
-  left: 60px;
+  left: 30px;
 
   padding-left: 10px;
 
   transform: translate(0, -50%);
 
   font-size: 3rem;
+  @include sm {
+    font-size: 1.5rem;
+}
 }
 
 .control-next {
   top: 50%;
-  right: 60px;
+  right: 30px;
 
   padding-right: 10px;
 
   transform: translate(0, -50%);
 
   font-size: 3rem;
+  @include sm {
+    font-size: 1.5rem;
+}
 }
 
 .control-pause {
   top: 50%;
   left: 50%;
-
-  transition: 2s;
   transform: translate(-50%, -50%);
-
   color: transparent;
 
   font-size: 30vh;
 
-  @include md {
+  @include sm {
     font-size: 15vh;
-  }
+}
 }
