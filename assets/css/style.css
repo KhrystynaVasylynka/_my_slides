@@ -311,7 +311,7 @@ template {
       -ms-transform: translate(0, -50%);
           transform: translate(0, -50%);
 
-  font-size: 3rem;
+  font-size: 5rem;
 }
 
 .control-next {
@@ -324,12 +324,19 @@ template {
       -ms-transform: translate(0, -50%);
           transform: translate(0, -50%);
 
-  font-size: 3rem;
+  font-size: 5rem;
 }
 
 .control-pause {
   top: 50%;
   left: 50%;
+
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 
   -webkit-transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
@@ -521,10 +528,10 @@ template {
     height: 2.5px;
   }
   .control-prev {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
   }
   .control-next {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
   }
   .control-pause {
     font-size: 15vh;

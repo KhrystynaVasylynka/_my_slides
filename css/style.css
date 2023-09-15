@@ -445,11 +445,11 @@ template {
   left: 30px;
   padding-left: 10px;
   transform: translate(0, -50%);
-  font-size: 3rem;
+  font-size: 5rem;
 }
 @media (max-width: 575.8px) {
   .control-prev {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
   }
 }
 
@@ -458,15 +458,17 @@ template {
   right: 30px;
   padding-right: 10px;
   transform: translate(0, -50%);
-  font-size: 3rem;
+  font-size: 5rem;
 }
 @media (max-width: 575.8px) {
   .control-next {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
   }
 }
 
 .control-pause {
+  display: flex;
+  justify-content: center;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
